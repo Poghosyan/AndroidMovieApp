@@ -14,6 +14,11 @@ import java.net.URL;
 public class ApiCall extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = ApiCall.class.getSimpleName();
+    private String BASE_URL;
+
+    public ApiCall(String url_base) {
+        BASE_URL = url_base;
+    }
 
     @Override
     protected Void doInBackground(String... params) {
@@ -28,7 +33,12 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
 
         try {
             //Construct URL
-            Uri builtUri = Uri.parse("");
+            String API_KEY = "api_key";
+            String QUERY_PARAM = "year";
+            Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                    .appendQueryParameter(API_KEY, BuildConfig.MOVIE_DB_API_KEY)
+                    .appendQueryParameter(QUERY_PARAM, params[0])
+                    .build();
 
             URL url = new URL(builtUri.toString());
 
@@ -41,7 +51,6 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
-                // Nothing to do.
                 return null;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
