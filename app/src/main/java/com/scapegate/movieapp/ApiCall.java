@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ApiCall extends AsyncTask<String, Void, Void> {
+public class ApiCall extends AsyncTask<String, Void, String> {
 
     private final String LOG_TAG = ApiCall.class.getSimpleName();
     private String BASE_URL;
@@ -21,7 +21,7 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected String doInBackground(String... params) {
         if (params.length == 0) {
             return null;
         }
@@ -32,7 +32,6 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
         String jsonStr;
 
         try {
-            //Construct URL
             String API_KEY = "api_key";
             String QUERY_PARAM = "year";
             Uri builtUri = Uri.parse(BASE_URL).buildUpon()
@@ -42,7 +41,6 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
 
             URL url = new URL(builtUri.toString());
 
-            // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -57,9 +55,6 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
                 buffer.append(line + "\n");
             }
 
@@ -68,10 +63,9 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
                 return null;
             }
             jsonStr = buffer.toString();
+            return jsonStr;
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
-            // to parse it.
             return null;
         } finally {
             if (urlConnection != null) {
@@ -85,7 +79,5 @@ public class ApiCall extends AsyncTask<String, Void, Void> {
                 }
             }
         }
-
-        return null;
     }
 }
