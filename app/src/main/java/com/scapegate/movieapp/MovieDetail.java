@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -35,10 +36,10 @@ public class MovieDetail extends AppCompatActivity {
             MovieData data = getActivity().getIntent().getExtras().getParcelable("myMovieData");
 
             View rootView = inflater.inflate(R.layout.activity_movie_detail, container, false);
-//            ((TextView)rootView.findViewById(R.id.movie_title)).setText(data.title);
-//            ((TextView)rootView.findViewById(R.id.movie_rating)).setText(String.valueOf(data.rating));
-//            ((TextView)rootView.findViewById(R.id.movie_overview)).setText(data.synopsis);
-//            ((TextView)rootView.findViewById(R.id.movie_rel_date)).setText(data.releaseDate);
+            ((TextView)rootView.findViewById(R.id.movie_title)).setText(data.title);
+            ((TextView)rootView.findViewById(R.id.movie_rating)).setText(String.valueOf(data.rating));
+            ((TextView)rootView.findViewById(R.id.movie_overview)).setText(data.synopsis);
+            ((TextView)rootView.findViewById(R.id.movie_rel_date)).setText(data.releaseDate);
             Picasso.with(getActivity()).load(data.imageUrl).into(((ImageView) rootView.findViewById(R.id.movie_detail_poster)));
             return rootView;
         }
